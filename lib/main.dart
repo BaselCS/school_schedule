@@ -1,10 +1,13 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:school_schedule/custom/calender.dart';
 import 'package:school_schedule/web/model.dart';
 import 'package:school_schedule/web/web_scraping.dart';
 
 void main() {
-  return runApp(const MaterialApp(title: 'Calendar Demo', home: Scaffold(body: MyBody())));
+  return runApp(MaterialApp(
+      theme: ThemeData.dark(), title: 'Calendar Demo', home: const Scaffold(body: Directionality(textDirection: TextDirection.rtl, child: MyBody()))));
 }
 
 class MyBody extends StatefulWidget {
@@ -14,83 +17,61 @@ class MyBody extends StatefulWidget {
   State<MyBody> createState() => _MyBodyState();
 }
 
-// class _MyBodyState extends State<MyBody> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return ListView.separated(
-//       itemCount: test.length,
-//       separatorBuilder: (BuildContext context, int index) {
-//         return SizedBox(
-//           height: MediaQuery.of(context).size.height * 0.15,
-//         );
-//       },
-//       itemBuilder: (context, index) {
-//         return SizedBox(height: MediaQuery.of(context).size.height * 0.8, width: MediaQuery.of(context).size.width * 0.8, child: MyCalender(courses: test));
-//       },
-//     );
-//   }
-// }
-
 class _MyBodyState extends State<MyBody> {
   @override
   Widget build(BuildContext context) {
+    //النوع مستقبل يرجع قيمة بعد مده فأفضل طريقة لوأبي أعرض شيء بعد مده معينة أستخدم النباء المستقبلي
     return FutureBuilder<List<List<Course>>>(
-      future: justForTest(),
+      future: justForTest(), //القيمة التي أريد عرضها
       builder: (context, state) {
         if (state.hasData) {
-          return ListView.separated(
+          //عرض القيمة
+          return ListView.builder(
             itemCount: state.data!.length,
-            separatorBuilder: (BuildContext context, int index) {
-              return SizedBox(
-                height: MediaQuery.of(context).size.height * 0.15,
-              );
-            },
             itemBuilder: (context, index) {
-              return SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.8,
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  child: MyCalender(courses: state.data![index]));
+              //أول ساعة في الأسبوع و أخر ساعة
+              int earliestHour = state.data![index][0].days[0].hour;
+              int lastHour = state.data![index][0].days[0].hour;
+              for (var i = 0; i < state.data![index].length; i++) {
+                earliestHour = min(state.data![index][i].days[0].hour, earliestHour);
+                lastHour = max(state.data![index][i].days[1].hour, lastHour);
+              }
+
+              return Column(
+                children: [
+                  SizedBox(
+                      height: (lastHour - earliestHour + 1) * 85, //المدة * حجم المادة
+                      child: MyCalender(
+                        courses: state.data![index],
+                        earliestHour: earliestHour.toDouble(),
+                        lastHour: lastHour.toDouble(),
+                      )),
+                  // const SizedBox(height: 20),
+                  // Row(
+                  //   children: [
+                  //     ListView.builder(itemBuilder: (context, index) {
+                  //       return Text("${state.data![index][0].courseName} ${state.data![index][0].sectionNumber} ${state.data![index][0].crn}");
+                  //     })
+                  //   ],
+                  // )
+                ],
+              );
             },
           );
         } else if (state.hasError) {
           return Text(state.error.toString());
         } else {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(height: 20),
+              Text('Loading...'),
+            ],
+          ));
         }
       },
     );
   }
 }
-// List<Course> test = [
-//   Course(
-//       courseName: 'test',
-//       crn: 1,
-//       days: [
-//         DateTime(2023, 1, 1, 1),
-//         DateTime(2023, 1, 1, 1, 50),
-//         DateTime(2023, 1, 2, 1),
-//         DateTime(2023, 1, 2, 1),
-//         DateTime(2023, 1, 3, 1),
-//         DateTime(2023, 1, 3, 1),
-//       ],
-//       doctorName: ["Dr. Ahmed"],
-//       isSectionAvailable: true,
-//       isTheory: true,
-//       sectionNumber: 1),
-  // Course(
-  //     courseName: 'Math',
-  //     crn: 1,
-  //     days: [DateTime(2023, 1, 2, 1), DateTime(2023, 1, 2, 1, 50)],
-  //     doctorName: ["Dr. Ahmed"],
-  //     isSectionAvailable: true,
-  //     isTheory: true,
-  //     sectionNumber: 1),
-  // Course(
-  //     courseName: 'Math',
-  //     crn: 1,
-  //     days: [DateTime(2023, 1, 1, 8), DateTime(2023, 1, 1, 8, 50)],
-  //     doctorName: ["Dr. Ahmed"],
-  //     isSectionAvailable: true,
-  //     isTheory: true,
-  //     sectionNumber: 1)
-// ];

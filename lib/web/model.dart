@@ -6,6 +6,7 @@ class Course {
   bool isSectionAvailable = true;
   String courseName;
   List<DateTime> days;
+  List<DateTime> labDays = [];
   bool isTheory = true;
   List<String> doctorName;
   Course({
@@ -88,9 +89,7 @@ class Course {
   }
 
   void itHaveLab(String labDoctorName, List<DateTime> time) {
-    doctorName.first = "نظري : ${doctorName.first}";
-    doctorName.add("عملي : $labDoctorName");
-
+    doctorName.add(labDoctorName);
     days.addAll(time);
   }
 

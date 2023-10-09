@@ -1,63 +1,64 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart' show debugPrint;
 import 'package:html/dom.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'backend.dart';
 import 'model.dart';
 
-// void main() async {
-//   // List<Element> elements = await askForInfo();
-//   // inputTest(infoCleaner(elements));
-// }
+//List<Course>
 
 Future<List<List<Course>>> justForTest() async {
-  List<List<Course>> courses = [];
-  List<List<Course>> choosingCourses = [];
+  // List<List<Course>> courses = [];
+  // List<List<Course>> choosingCourses = [];
 
-  Map<String, List<Course>> mainMap = await infoCleaner();
+  // Map<String, List<Course>> mainMap = await infoCleaner();
 
-  for (var courseCode in ["0901-204", "0911-220", "0911-310"]) {
-    if (mainMap.containsKey(courseCode)) {
-      choosingCourses.add(mainMap[courseCode]!);
-    }
-  }
+  // for (String courseCode in ["0901-204", "0911-220", "0911-310"]) {
+  //   if (mainMap.containsKey(courseCode)) {
+  //     choosingCourses.add(mainMap[courseCode]!);
+  //   }
+  // }
 
-  List<List<Course>> allAvailablePermutations = []; //تحوي كل الجداول الممكنة
+  // List<List<Course>> allAvailablePermutations = []; //تحوي كل الجداول الممكنة
 
-  generatePermutations(choosingCourses, allAvailablePermutations, 0, []);
-  debugPrint("allAvailablePermutations is ${allAvailablePermutations.length}");
+  // generatePermutations(choosingCourses, allAvailablePermutations, 0, []);
+  // debugPrint("allAvailablePermutations is ${allAvailablePermutations.length}");
 
-  for (List<Course> list in allAvailablePermutations) {
-    if (Course.isTimeOverLap(list) == false) {
-      List<Course> temp = [];
-      for (var element in list) {
-        for (var i = 0; i < element.days.length; i = i + 2) {
-          temp.add(Course(
-              courseName: element.courseName,
-              crn: element.crn,
-              sectionNumber: element.sectionNumber,
-              days: [element.days[i], element.days[i + 1]],
-              doctorName: element.doctorName,
-              isSectionAvailable: element.isSectionAvailable,
-              isTheory: element.isTheory));
-        }
-      }
-      courses.add(temp);
-    }
-    debugPrint("-" * 50);
-  }
+  // for (List<Course> list in allAvailablePermutations) {
+  //   if (Course.isTimeOverLap(list) == false) {
+  //     List<Course> temp = [];
+  //     for (Course element in list) {
+  //       for (int i = 0; i < element.days.length; i = i + 2) {
+  //         //أفصلها و أخلي كل محاضرة مستقله للعرض
+  //         if (element.labDays.contains(element.days[i]) == false) {
+  //           temp.add(Course(
+  //               courseName: element.courseName,
+  //               crn: element.crn,
+  //               sectionNumber: element.sectionNumber,
+  //               days: [element.days[i], element.days[i + 1]],
+  //               doctorName: [element.doctorName.first],
+  //               isSectionAvailable: element.isSectionAvailable,
+  //               isTheory: element.isTheory));
+  //         } else {
+  //           temp.add(Course(
+  //               courseName: element.courseName,
+  //               crn: element.crn,
+  //               sectionNumber: element.sectionNumber,
+  //               days: [element.labDays.firstWhere((date) => date == element.days[i]), element.labDays.firstWhere((date) => date == element.days[i + 1])],
+  //               doctorName: [element.doctorName.first],
+  //               isSectionAvailable: element.isSectionAvailable,
+  //               isTheory: false));
+  //         }
+  //       }
+  //     }
+  //     courses.add(temp);
+  //   }
+  // }
+  // debugPrint("courses is ${courses.length}");
 
-  debugPrint("courses is ${courses.length}");
-  return courses;
-}
-
-void printCourse(Course course) {
-  debugPrint(course.courseName);
-  debugPrint(course.crn.toString());
-  debugPrint(course.sectionNumber.toString());
-  debugPrint(course.days.toString());
-  debugPrint(course.doctorName.toString());
-  debugPrint(course.isSectionAvailable == true ? "متاحه" : "ممتلى");
-  debugPrint(course.isTheory == true ? "نظري" : "عملي");
+  return test;
 }
 
 //حلقة تكرار للتاكد من الأتصال تعيد معلومات الصفحة كاملة
@@ -92,6 +93,7 @@ Future<Map<String, List<Course>>> infoCleaner() async {
         //إذا كان المقرر عملي
       } else if (course.isTheory == false && map[courseCode]!.any((element) => element.sectionNumber == course.sectionNumber - 40)) {
         map[courseCode]!.firstWhere((element) => element.sectionNumber == course.sectionNumber - 40).itHaveLab(course.doctorName.first, course.days);
+        map[courseCode]!.firstWhere((element) => element.sectionNumber == course.sectionNumber - 40).labDays = course.days;
         //إذا كان المقرر مكرر و الشعبة مكررة
       } else if (map[courseCode]!.any((element) => element.crn == course.crn)) {
         map[courseCode]!.firstWhere((element) => element.crn == course.crn).days.addAll(course.days);
@@ -104,30 +106,6 @@ Future<Map<String, List<Course>>> infoCleaner() async {
   return map;
 }
 
-// void inputTest(Map<String, List<Course>> mainMap) {
-//   List<List<Course>> choosingCourses = [];
-
-//   stdin.readLineSync()!.split(" ").forEach((courseCode) {
-//     if (mainMap.containsKey(courseCode)) {
-//       choosingCourses.add(mainMap[courseCode]!);
-//     }
-//   });
-
-//   List<List<Course>> allAvailablePermutations = []; //تحوي كل الجداول الممكنة
-
-//   generatePermutations(choosingCourses, allAvailablePermutations, 0, []);
-//   int i = 0;
-//   for (List<Course> list in allAvailablePermutations) {
-//     if (Course.isTimeOverLap(list) == false) {
-//       for (Course course in list) {
-
-//         i++;
-//       }
-//       debugPrint("-" * 50);
-//     }
-//   }
-// }
-
 ///يعمل على إيجاد كل الحالات الممكنة للمواد المدخلة
 void generatePermutations(List<List<Course>> lists, List<List<Course>> result, int depth, List<Course> current) {
   if (depth == lists.length) {
@@ -139,3 +117,254 @@ void generatePermutations(List<List<Course>> lists, List<List<Course>> result, i
     generatePermutations(lists, result, depth + 1, [...current, lists[depth][i]]);
   }
 }
+
+void printCourse(Course course) {
+  writeCounter("course.courseName: ${course.courseName}");
+  writeCounter("course.crn: ${course.crn}");
+  writeCounter("course.sectionNumber: ${course.sectionNumber}");
+  writeCounter("course.days: ${course.days}");
+  writeCounter("course.doctorName: ${course.doctorName}");
+  writeCounter("course.isSectionAvailable: ${course.isSectionAvailable}");
+  writeCounter("course.isTheory: ${course.isTheory}");
+  writeCounter("course.labDays: ${course.labDays}");
+
+  // writeCounter(course.crn.toString());
+  // writeCounter(course.sectionNumber.toString());
+  // writeCounter(course.days.toString());
+  // writeCounter(course.doctorName.toString());
+  // writeCounter(course.isSectionAvailable == true ? "متاحه" : "ممتلى");
+  // writeCounter(course.isTheory == true ? "نظري" : "عملي");
+}
+
+Future<String> get _localPath async {
+  final directory = await getApplicationDocumentsDirectory();
+
+  return directory.path;
+}
+
+Future<File> get _localFile async {
+  final path = await _localPath;
+  return File('$path/test.txt');
+}
+
+Future<File> writeCounter(String counter) async {
+  final file = await _localFile;
+
+  // Write the file
+  return file.writeAsString('$counter\n', mode: FileMode.append);
+}
+
+List<List<Course>> test = [
+  [
+    Course(
+        courseName: " البرمجة الهندسية",
+        crn: 56920,
+        sectionNumber: 1,
+        days: [DateTime(2023, 01, 02, 07, 30, 00, 000), DateTime(2023, 01, 02, 08, 20, 00, 000)],
+        doctorName: ["صائب علي الصيصان"],
+        isSectionAvailable: false,
+        isTheory: true),
+    Course(
+        courseName: " البرمجة الهندسية",
+        crn: 56920,
+        sectionNumber: 1,
+        days: [DateTime(2023, 01, 04, 07, 30, 00, 000), DateTime(2023, 01, 04, 08, 20, 00, 000)],
+        doctorName: ["صائب علي الصيصان"],
+        isSectionAvailable: false,
+        isTheory: true),
+    Course(
+        courseName: " البرمجة الهندسية",
+        crn: 56920,
+        sectionNumber: 1,
+        days: [DateTime(2023, 01, 04, 08, 30, 00, 000), DateTime(2023, 01, 04, 09, 20, 00, 000)],
+        doctorName: ["صائب علي الصيصان"],
+        isSectionAvailable: false,
+        isTheory: true),
+    Course(
+        courseName: "البرمجة كائنية",
+        crn: 34278,
+        sectionNumber: 1,
+        days: [DateTime(2023, 01, 02, 14, 00, 00, 000), DateTime(2023, 01, 02, 14, 50, 00, 000)],
+        doctorName: ["محمد شجاع صميم"],
+        isSectionAvailable: true,
+        isTheory: true),
+    Course(
+        courseName: "البرمجة كائنية",
+        crn: 34278,
+        sectionNumber: 1,
+        days: [DateTime(2023, 01, 02, 13, 00, 00, 000), DateTime(2023, 01, 02, 13, 50, 00, 000)],
+        doctorName: ["محمد شجاع صميم"],
+        isSectionAvailable: true,
+        isTheory: true),
+    Course(
+        courseName: "البرمجة كائنية",
+        crn: 34278,
+        sectionNumber: 1,
+        days: [DateTime(2023, 01, 04, 13, 00, 00, 000), DateTime(2023, 01, 04, 13, 50, 00, 000)],
+        doctorName: ["محمد شجاع صميم"],
+        isSectionAvailable: true,
+        isTheory: true),
+    Course(
+        courseName: "البرمجة كائنية",
+        crn: 34278,
+        sectionNumber: 1,
+        days: [DateTime(2023, 01, 01, 14, 00, 00, 000), DateTime(2023, 01, 01, 14, 50, 00, 000)],
+        doctorName: ["محمد شجاع صميم"],
+        isSectionAvailable: true,
+        isTheory: false),
+    Course(
+        courseName: "البرمجة كائنية",
+        crn: 34278,
+        sectionNumber: 1,
+        days: [DateTime(2023, 01, 03, 14, 00, 00, 000), DateTime(2023, 01, 03, 14, 50, 00, 000)],
+        doctorName: ["محمد شجاع صميم"],
+        isSectionAvailable: true,
+        isTheory: false),
+    Course(
+        courseName: "هندسة البرمجيات",
+        crn: 63394,
+        sectionNumber: 3,
+        days: [DateTime(2023, 01, 01, 08, 30, 00, 000), DateTime(2023, 01, 01, 09, 20, 00, 000)],
+        doctorName: ["شاكيل  احمد"],
+        isSectionAvailable: true,
+        isTheory: true),
+    Course(
+        courseName: "هندسة البرمجيات",
+        crn: 63394,
+        sectionNumber: 3,
+        days: [DateTime(2023, 01, 03, 08, 30, 00, 000), DateTime(2023, 01, 03, 09, 20, 00, 000)],
+        doctorName: ["شاكيل  احمد"],
+        isSectionAvailable: true,
+        isTheory: true),
+    Course(
+        courseName: "هندسة البرمجيات",
+        crn: 63394,
+        sectionNumber: 3,
+        days: [DateTime(2023, 01, 05, 08, 30, 00, 000), DateTime(2023, 01, 05, 09, 20, 00, 000)],
+        doctorName: ["شاكيل  احمد"],
+        isSectionAvailable: true,
+        isTheory: true),
+    Course(
+        courseName: "هندسة البرمجيات",
+        crn: 63394,
+        sectionNumber: 3,
+        days: [DateTime(2023, 01, 01, 09, 30, 00, 000), DateTime(2023, 01, 01, 10, 20, 00, 000)],
+        doctorName: ["شاكيل  احمد"],
+        isSectionAvailable: true,
+        isTheory: false),
+    Course(
+        courseName: "هندسة البرمجيات",
+        crn: 63394,
+        sectionNumber: 3,
+        days: [DateTime(2023, 01, 02, 09, 30, 00, 000), DateTime(2023, 01, 02, 10, 20, 00, 000)],
+        doctorName: ["شاكيل  احمد"],
+        isSectionAvailable: true,
+        isTheory: false),
+  ],
+  [
+    Course(
+        courseName: " البرمجة الهندسية",
+        crn: 28331,
+        sectionNumber: 2,
+        days: [DateTime(2023, 01, 04, 09, 30, 00, 000), DateTime(2023, 01, 04, 10, 20, 00, 000)],
+        doctorName: ["محمد مصطفى الغوانم"],
+        isSectionAvailable: false,
+        isTheory: true),
+    Course(
+        courseName: " البرمجة الهندسية",
+        crn: 28331,
+        sectionNumber: 2,
+        days: [DateTime(2023, 01, 02, 08, 30, 00, 000), DateTime(2023, 01, 02, 09, 20, 00, 000)],
+        doctorName: ["محمد مصطفى الغوانم"],
+        isSectionAvailable: false,
+        isTheory: true),
+    Course(
+        courseName: " البرمجة الهندسية",
+        crn: 28331,
+        sectionNumber: 2,
+        days: [DateTime(2023, 01, 04, 08, 30, 00, 000), DateTime(2023, 01, 04, 09, 20, 00, 000)],
+        doctorName: ["محمد مصطفى الغوانم"],
+        isSectionAvailable: false,
+        isTheory: true),
+    Course(
+        courseName: "البرمجة كائنية",
+        crn: 34278,
+        sectionNumber: 1,
+        days: [DateTime(2023, 01, 02, 14, 00, 00, 000), DateTime(2023, 01, 02, 14, 50, 00, 000)],
+        doctorName: ["محمد شجاع صميم"],
+        isSectionAvailable: true,
+        isTheory: true),
+    Course(
+        courseName: "البرمجة كائنية",
+        crn: 34278,
+        sectionNumber: 1,
+        days: [DateTime(2023, 01, 02, 13, 00, 00, 000), DateTime(2023, 01, 02, 13, 50, 00, 000)],
+        doctorName: ["محمد شجاع صميم"],
+        isSectionAvailable: true,
+        isTheory: true),
+    Course(
+        courseName: "البرمجة كائنية",
+        crn: 34278,
+        sectionNumber: 1,
+        days: [DateTime(2023, 01, 04, 13, 00, 00, 000), DateTime(2023, 01, 04, 13, 50, 00, 000)],
+        doctorName: ["محمد شجاع صميم"],
+        isSectionAvailable: true,
+        isTheory: true),
+    Course(
+        courseName: "البرمجة كائنية",
+        crn: 34278,
+        sectionNumber: 1,
+        days: [DateTime(2023, 01, 01, 14, 00, 00, 000), DateTime(2023, 01, 01, 14, 50, 00, 000)],
+        doctorName: ["محمد شجاع صميم"],
+        isSectionAvailable: true,
+        isTheory: false),
+    Course(
+        courseName: "البرمجة كائنية",
+        crn: 34278,
+        sectionNumber: 1,
+        days: [DateTime(2023, 01, 03, 14, 00, 00, 000), DateTime(2023, 01, 03, 14, 50, 00, 000)],
+        doctorName: ["محمد شجاع صميم"],
+        isSectionAvailable: true,
+        isTheory: false),
+    Course(
+        courseName: "هندسة البرمجيات",
+        crn: 63394,
+        sectionNumber: 3,
+        days: [DateTime(2023, 01, 01, 08, 30, 00, 000), DateTime(2023, 01, 01, 09, 20, 00, 000)],
+        doctorName: ["شاكيل  احمد"],
+        isSectionAvailable: true,
+        isTheory: true),
+    Course(
+        courseName: "هندسة البرمجيات",
+        crn: 63394,
+        sectionNumber: 3,
+        days: [DateTime(2023, 01, 03, 08, 30, 00, 000), DateTime(2023, 01, 03, 09, 20, 00, 000)],
+        doctorName: ["شاكيل  احمد"],
+        isSectionAvailable: true,
+        isTheory: true),
+    Course(
+        courseName: "هندسة البرمجيات",
+        crn: 63394,
+        sectionNumber: 3,
+        days: [DateTime(2023, 01, 05, 08, 30, 00, 000), DateTime(2023, 01, 05, 09, 20, 00, 000)],
+        doctorName: ["شاكيل  احمد"],
+        isSectionAvailable: true,
+        isTheory: true),
+    Course(
+        courseName: "هندسة البرمجيات",
+        crn: 63394,
+        sectionNumber: 3,
+        days: [DateTime(2023, 01, 01, 09, 30, 00, 000), DateTime(2023, 01, 01, 10, 20, 00, 000)],
+        doctorName: ["شاكيل  احمد"],
+        isSectionAvailable: true,
+        isTheory: false),
+    Course(
+        courseName: "هندسة البرمجيات",
+        crn: 63394,
+        sectionNumber: 3,
+        days: [DateTime(2023, 01, 02, 09, 30, 00, 000), DateTime(2023, 01, 02, 10, 20, 00, 000)],
+        doctorName: ["شاكيل  احمد"],
+        isSectionAvailable: true,
+        isTheory: false),
+  ]
+];
