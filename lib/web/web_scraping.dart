@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart' show debugPrint;
 import 'package:html/dom.dart';
-import 'package:path_provider/path_provider.dart';
 
 import 'backend.dart';
 import 'model.dart';
@@ -118,41 +115,14 @@ void generatePermutations(List<List<Course>> lists, List<List<Course>> result, i
   }
 }
 
-void printCourse(Course course) {
-  writeCounter("course.courseName: ${course.courseName}");
-  writeCounter("course.crn: ${course.crn}");
-  writeCounter("course.sectionNumber: ${course.sectionNumber}");
-  writeCounter("course.days: ${course.days}");
-  writeCounter("course.doctorName: ${course.doctorName}");
-  writeCounter("course.isSectionAvailable: ${course.isSectionAvailable}");
-  writeCounter("course.isTheory: ${course.isTheory}");
-  writeCounter("course.labDays: ${course.labDays}");
-
-  // writeCounter(course.crn.toString());
-  // writeCounter(course.sectionNumber.toString());
-  // writeCounter(course.days.toString());
-  // writeCounter(course.doctorName.toString());
-  // writeCounter(course.isSectionAvailable == true ? "متاحه" : "ممتلى");
-  // writeCounter(course.isTheory == true ? "نظري" : "عملي");
-}
-
-Future<String> get _localPath async {
-  final directory = await getApplicationDocumentsDirectory();
-
-  return directory.path;
-}
-
-Future<File> get _localFile async {
-  final path = await _localPath;
-  return File('$path/test.txt');
-}
-
-Future<File> writeCounter(String counter) async {
-  final file = await _localFile;
-
-  // Write the file
-  return file.writeAsString('$counter\n', mode: FileMode.append);
-}
+// void printCourse(Course course) {
+// writeCounter(course.crn.toString());
+// writeCounter(course.sectionNumber.toString());
+// writeCounter(course.days.toString());
+// writeCounter(course.doctorName.toString());
+// writeCounter(course.isSectionAvailable == true ? "متاحه" : "ممتلى");
+// writeCounter(course.isTheory == true ? "نظري" : "عملي");
+// }
 
 List<List<Course>> test = [
   [

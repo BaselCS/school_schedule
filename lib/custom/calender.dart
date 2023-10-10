@@ -35,15 +35,14 @@ class _MyCalenderState extends State<MyCalender> {
         nonWorkingDays: const [DateTime.saturday, DateTime.friday],
       ),
 
-      onTap: (calendarTapDetails) => showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                title: Text(calendarTapDetails.appointments![0].courseName),
-                content: Text(calendarTapDetails.appointments![0].doctorName.first),
-              )),
+      // onTap: (calendarTapDetails) => showDialog(
+      //     context: context,
+      //     builder: (context) => AlertDialog(
+      //           title: Text(calendarTapDetails.appointments![0].courseName),
+      //           content: Text(calendarTapDetails.appointments![0].doctorName.first),
+      //         )),
       appointmentTextStyle: const TextStyle(
         fontSize: 16,
-        color: Colors.white,
       ),
     );
   }
@@ -76,7 +75,7 @@ class CourseDataSource extends CalendarDataSource {
 
   @override
   Color getColor(int index) {
-    return _getCourseData(index).isTheory ? Colors.blue : Colors.red; //لو لها أسمين إذا هي عملي
+    return _getCourseData(index).isTheory ? const Color(0xff007D8B) : const Color(0xff004F58);
   }
 
   @override
