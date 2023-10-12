@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart' show Color;
 import 'package:html/dom.dart';
 
 class Course {
@@ -9,7 +10,9 @@ class Course {
   List<DateTime> labDays = [];
   bool isTheory = true;
   List<String> doctorName;
+  Color? color;
   Course({
+    this.color,
     required this.crn,
     required this.sectionNumber,
     required this.isSectionAvailable,

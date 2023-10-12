@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:school_schedule/web/model.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-/// The hove page which hosts the calendar
 class MyCalender extends StatefulWidget {
-  /// Creates the home page to display teh calendar widget.
   final List<Course> courses;
   final double earliestHour;
   final double lastHour;
@@ -35,14 +34,18 @@ class _MyCalenderState extends State<MyCalender> {
         nonWorkingDays: const [DateTime.saturday, DateTime.friday],
       ),
 
-      // onTap: (calendarTapDetails) => showDialog(
-      //     context: context,
-      //     builder: (context) => AlertDialog(
-      //           title: Text(calendarTapDetails.appointments![0].courseName),
-      //           content: Text(calendarTapDetails.appointments![0].doctorName.first),
-      //         )),
+      onTap: (calendarTapDetails) async {
+        if (calendarTapDetails.appointments != null) {
+          Clipboard.setData(ClipboardData(text: calendarTapDetails.appointments!.first.crn.toString()));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            duration: const Duration(milliseconds: 500),
+            backgroundColor: calendarTapDetails.appointments!.first.color,
+            content: const Text("تم نسخ الكود", textAlign: TextAlign.center, style: TextStyle(fontSize: 24, color: Colors.white)),
+          ));
+        }
+      },
       appointmentTextStyle: const TextStyle(
-        fontSize: 16,
+        fontSize: 24,
       ),
     );
   }
@@ -60,7 +63,7 @@ class CourseDataSource extends CalendarDataSource {
 
   @override
   String getNotes(int index) {
-    return _getCourseData(index).doctorName.toString();
+    return "${_getCourseData(index).doctorName}";
   }
 
   @override
@@ -70,12 +73,14 @@ class CourseDataSource extends CalendarDataSource {
 
   @override
   String getSubject(int index) {
-    return "${_getCourseData(index).courseName}\n${_getCourseData(index).doctorName.first}\n ${_getCourseData(index).sectionNumber}";
+    return _getCourseData(index).isTheory
+        ? "${_getCourseData(index).courseName} - ${_getCourseData(index).sectionNumber}\n${_getCourseData(index).crn}\t - ${_getCourseData(index).doctorName.first}"
+        : "🔬${_getCourseData(index).courseName} - ${_getCourseData(index).sectionNumber + 40}\n${_getCourseData(index).crn}\t - ${_getCourseData(index).doctorName.first}";
   }
 
   @override
   Color getColor(int index) {
-    return _getCourseData(index).isTheory ? const Color(0xff007D8B) : const Color(0xff004F58);
+    return _getCourseData(index).isTheory ? _getCourseData(index).color! : _getCourseData(index).color!;
   }
 
   @override
