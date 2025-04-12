@@ -1,17 +1,35 @@
-# school_schedule
+# مكون جداول لجامعة الملك فيصل
 
-A new Flutter project.
+![صورة من البرنامج](https://github.com/BaselCS/school_schedule/blob/public-version/assets/%D8%B5%D9%88%D8%B1%D8%A9%20%D9%85%D9%86%20%D8%A7%D9%84%D8%A8%D8%B1%D8%A7%D9%85%D8%AC.png?raw=true)
 
-## Getting Started
+مشروع مبني على إطار [فلاتر](https://github.com/flutter/flutter) ، يهدف إلى تكوين جداول من بين عدد من المواد المُنحصرة تحت كلية واحدة.
 
-This project is a starting point for a Flutter application.
+بحكم أنه مبني على فلاتر ، فهو يعمل على كل المنصات تقريباً - تم اختباره على أندرويد ، لينكس ، ويندوز- .
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+# تنبيه
+توقفت عن صيانة المشروع و تطويره ، لمن يرغب يمكنه نسخ المشروع و التعديل عليه كما يريد ، يوجد هنالك قائمة اقتراحات و مشاكل يمكنه البدء منها
+# خطوات التحميل 
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-New public version changes
+1. تحميل [فلاتر](https://docs.flutter.dev/get-started/install)  
+2. نسخ المشروع من خلال 
+```bash
+git clone https://github.com/BaselCS/school_schedule.git
+```
+3. معرفة ما يحتاج لتحديث من خلال 
+```bash
+flutter pub outdated
+```
+4. تحديث ما يحتاج لتحديث من خلال 
+```
+flutter pub upgrade {أسماء الحزم من الأمر السابق}
+```
+5. الذهاب إلى `lib/web/backend.dart` و تحديث `url` لرابط المناسب لك
+6. تشغيل المشروع على المنصة المرغوبة
+
+
+# اقتراحات تطوير : 
+- حل مشكلة إخفاق البرنامج عند السحب السريع .
+- حفظ الجداول التي يرغب المستخدم في حظفها .
+- حفظ أرقام المواد في حالة رغبة المستخدم في ذلك .
+- تحسين الواجهة و جعلها مناسبة للهواتف .
