@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+//مكون الذي يسمع بإدخال أرقام المواد
+
 const List<Color> colors = [
   Color(0xff00363D),
   Color(0xff1C3438),

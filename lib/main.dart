@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:school_schedule/pages/calender_page.dart';
 
+/*
+الملف الأساسي للتطبيق لا يحوي شء مهم إلا تخصيص الألوان فقط
+*/
+
 void main() {
   return runApp(const MyApp());
 }
