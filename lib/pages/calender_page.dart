@@ -6,6 +6,8 @@ import 'package:school_schedule/custom/my_textfiled.dart';
 import 'package:school_schedule/web/model.dart';
 import 'package:school_schedule/web/web_scraping.dart';
 
+//صفحة التقويم (الواجهة الرائيسية)
+
 class MyBody extends StatefulWidget {
   const MyBody({super.key});
 
@@ -59,7 +61,7 @@ class _MyBodyState extends State<MyBody> {
                 lastHour: 6,
               ))
           : FutureBuilder<List<List<Course>>>(
-              future: justForTest([
+              future: gettingData([
                 textEditingController[0].text, //القيمة التي أريد أن أبحث عنها
                 textEditingController[1].text, //القيمة التي أريد أن أبحث عنها
                 textEditingController[2].text, //القيمة التي أريد أن أبحث عنها

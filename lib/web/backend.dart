@@ -5,9 +5,13 @@ import 'package:html/dom.dart';
 import 'package:html/parser.dart' as parse;
 import 'package:http/http.dart' as http;
 
+/*
+الملف المسؤول عن الاتصال بالموقع 
+*/
+
+/// [userAgent] : اسم مقدم الطلب
 class UserAgentClient extends http.BaseClient {
-  //أقدم الطلب من كمتصفح كروم
-  final List<String> userAgent = ["Hello World", "Hassan Alkhamis", "Kill Yourself", "Mozilla/5.0"];
+  final List<String> userAgent = ["Hello World", "123", "hi", "Mozilla/5.0"];
   final http.Client _inner = http.Client();
   final int userId = 0;
 
@@ -21,8 +25,27 @@ class UserAgentClient extends http.BaseClient {
 }
 
 class WebScraper {
-  static const String url = "https://banner.kfu.edu.sa:7710/KFU/ws?p_trm_code=144410&p_col_code=09&p_sex_code=11";
+  /// [url] : رابط الموقع يجب أن يحدث في كل فصل
+  //TODO:حدث الرابط ليتوافق مع الفصل الدراسي الحالي
+  static const String url = "https://ssb-ar.kfu.edu.sa/PROD_ar/ws?p_trm_code=144710&p_col_code=09&p_sex_code=11";
 
+/*
+شرح الرابط 
+https://ssb-ar.kfu.edu.sa/PROD_ar/ws?p_trm_code={1}&p_col_code={2}&p_sex_code={3}
+{1} : يحوي السنة الدراسية و الفصل مثل 
+    144710
+      1447: السنة 
+      10: الفصل الأول
+        20: الفصل الثاني
+
+        
+{2} : يحوي رقم الكلية مثل 09
+{3} : يحوي الجنس
+        11: ذكر
+        12: أنثى
+*/
+
+  ///يقوم باستخراج البيانات من الموقع و يعيدها على شكل قائمة من العناصر
   static Future<List<Element>?> extractData() async {
     try {
       Random random = Random();
@@ -30,8 +53,8 @@ class WebScraper {
 
       http.Response response = await client.get(Uri.parse(url));
       if (response.statusCode == 200) {
-        response = await client.get(Uri.parse(url)); // get the html body
-        final Document html = parse.parse(response.body); // convert the html to a document object
+        response = await client.get(Uri.parse(url));
+        final Document html = parse.parse(response.body);
         final List<Element> container = html.getElementsByClassName('normaltxt');
         return container;
       }

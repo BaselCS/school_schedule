@@ -5,9 +5,9 @@ import 'package:school_schedule/custom/my_textfiled.dart';
 import 'backend.dart';
 import 'model.dart';
 
-//أكتب خورزمية تعيد تختار اللون بناء على المادة
+// الملف المسؤول منطق استخراج المواد و تحويلها إلى جدول
 
-Future<List<List<Course>>> justForTest(List<String> courseCodes) async {
+Future<List<List<Course>>> gettingData(List<String> courseCodes) async {
   List<List<Course>> courses = [];
   List<List<Course>> choosingCourses = [];
   final Map<String, Color> colorMap = {

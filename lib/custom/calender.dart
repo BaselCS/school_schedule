@@ -3,12 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:school_schedule/web/model.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
+// الملف المسؤول عن عرض الجدول
+
 class MyCalender extends StatefulWidget {
   final List<Course> courses;
   final double earliestHour;
   final double lastHour;
 
-  const MyCalender({Key? key, required this.courses, required this.earliestHour, required this.lastHour}) : super(key: key);
+  const MyCalender({super.key, required this.courses, required this.earliestHour, required this.lastHour});
 
   @override
   State<MyCalender> createState() => _MyCalenderState();
@@ -73,6 +75,7 @@ class CourseDataSource extends CalendarDataSource {
 
   @override
   String getSubject(int index) {
+    //🔬 تدل على العملي
     return _getCourseData(index).isTheory
         ? "${_getCourseData(index).courseName} - ${_getCourseData(index).sectionNumber}\n${_getCourseData(index).crn}\t - ${_getCourseData(index).doctorName.first}"
         : "🔬${_getCourseData(index).courseName} - ${_getCourseData(index).sectionNumber + 40}\n${_getCourseData(index).crn}\t - ${_getCourseData(index).doctorName.first}";

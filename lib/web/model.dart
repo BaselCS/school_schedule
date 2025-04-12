@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart' show Color;
 import 'package:html/dom.dart';
 
+/*
+النموذج الذي يحوي البيانات التي يتم استخراجها من الموقع
+*/
+
 class Course {
   int crn;
   int sectionNumber;
@@ -58,6 +62,7 @@ class Course {
           break;
       }
       //الوقت يكون على صيغة 0730  0820
+      // اي المحاضرة تبدأ سبع و نصف و تنتهي ثمانية و عشريين دقيقة
       hours1 = int.parse(hours.substring(0, 2));
       minute1 = int.parse(hours.substring(2, 4));
       hours2 = int.parse(hours.substring(6, 8));
@@ -96,7 +101,6 @@ class Course {
     days.addAll(time);
   }
 
-  //عشان الخريطة
   static String getCourseCode(Element element) {
     return element.getElementsByTagName('td')[0].text.replaceAll("\n", "");
   }
