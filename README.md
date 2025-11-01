@@ -33,3 +33,36 @@ flutter pub upgrade {أسماء الحزم من الأمر السابق}
 - حفظ الجداول التي يرغب المستخدم في حظفها .
 - حفظ أرقام المواد في حالة رغبة المستخدم في ذلك .
 - تحسين الواجهة و جعلها مناسبة للهواتف .
+
+# King Faisal University Schedule Builder
+A project built with Flutter, designed to generate study schedules from a set of courses offered under the same college.
+
+Since it’s built using [Flutter](https://github.com/flutter/flutter), so it runs on almost all major platforms — tested on Android, Linux, and Windows.
+
+# Note
+
+This project is no longer actively maintained.
+You are welcome to fork the repository and modify it as you wish.
+There’s a list of issues and suggestions you can start working on.
+
+# Installation Steps
+
+1. Install Flutter
+2. Clone the repository:
+`git clone https://github.com/BaselCS/school_schedule.git`
+
+3. Check for outdated dependencies:
+`flutter pub outdated`
+4. Update the required packages:
+`flutter pub upgrade {package_names_from_previous_command}`
+
+4. Open `lib/web/backend`.dart and update the `url` variable to your preferred endpoint.
+
+Run the project on your desired platform.
+
+# Suggested Improvements
+
+- Fix the crash issue that occurs during rapid scrolling.
+- Add support for saving favorite schedules.
+- Allow saving course numbers for easier reuse.
+- Improve the UI to be more mobile-friendly.
